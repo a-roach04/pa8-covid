@@ -166,7 +166,7 @@ cases |>
   ggplot(mapping = aes(x = year, 
                        y = total)) + 
   geom_col() + 
-  labs(x = "Year", y = "Annual COVID Cases") + 
+  labs(x = "Year", y = "Annual COVID Cases", title = "How do COVID cases in New York compare to California from 2020 to 2023?") + 
   facet_wrap(~state)
 #ggsave("pa-8-final.png")
 ```
