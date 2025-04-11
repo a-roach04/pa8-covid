@@ -134,11 +134,11 @@ cases |>
          year == "2021") |> #filters to only include California cases
   #unite("month_year", 8:9, sep = " ") |> #combines two variables into one
   ggplot(mapping = aes(x = month,
-                       y = cases_daily)) +
-  geom_boxplot(outliers = F) +
-  geom_jitter(alpha = 0.3, width = 0.2) +
+                       y = cases_daily)) + #graph month on x axis and cases_daily on y
+  geom_boxplot(outliers = F) + #create a boxplot
+  geom_jitter(alpha = 0.3, width = 0.2) + # add jitter overlay
   labs(x = "Month",
-       y = "Number of COVID Cases per Day")
+       y = "Number of COVID Cases per Day") # axis labels
 ```
 
 
@@ -153,4 +153,21 @@ cases |>
 
 ### Create your own graph
 
-Using the COVID-19 data, create your graph to answer you own research question. You will submit that graph as png file in your Canvas quiz. Include your research question as the subtitle of the graph.  
+Using the COVID-19 data, create your graph to answer you own research question. You will submit that graph as png file in your Canvas quiz. Include your research question as the subtitle of the graph.          
+
+```{r}
+cases |>
+  mutate(date = date(date), #treats date variable as a date
+         month = month(date, label = TRUE, abbr = TRUE),
+         year = year(date)) |> #creates year and month variable
+  filter(state == c("California", "New York")) |> 
+  group_by(year, state) |> 
+  summarize(total = sum(cases_daily)) |> 
+  ggplot(mapping = aes(x = year, 
+                       y = total)) + 
+  geom_col() + 
+  labs(x = "Year", y = "Annual COVID Cases") + 
+  facet_wrap(~state)
+#ggsave("pa-8-final.png")
+```
+
