@@ -97,14 +97,14 @@ Below is some code that can help you get started with the process of working wit
 ```{r}
 #| label: calculate-totals-month
 cases |> 
-  filter(state == "California") |> 
-  mutate(date = date(date),
+  filter(state == "California") |> #filters to only include California cases
+  mutate(date = date(date), #treats date variable as a date
          month = month(date, label = TRUE, abbr = FALSE),
-         year = year(date)) |> 
-  unite("month_year", 8:9, sep = " ") |> 
-  group_by(month_year) |> 
-  summarise("total" = sum(cases_daily)) |>
-  arrange(-total)
+         year = year(date)) |> #creates year and month variable
+  unite("month_year", 8:9, sep = " ") |> #combines two variables into one
+  group_by(month_year) |> #groups by month year
+  summarise("total" = sum(cases_daily)) |> #creates a total number of cases variable for each month
+  arrange(-total) #arranges with highest number of cases at top
 ```
 
 
@@ -126,6 +126,19 @@ Create a graph that maps the number of cases in California in 2021 only. Be sure
 ```{r}
 #| label: ca-2021-covid
 
+cases |>
+  mutate(date = date(date), #treats date variable as a date
+         month = month(date, label = TRUE, abbr = TRUE),
+         year = year(date)) |> #creates year and month variable
+  filter(state == "California",
+         year == "2021") |> #filters to only include California cases
+  #unite("month_year", 8:9, sep = " ") |> #combines two variables into one
+  ggplot(mapping = aes(x = month,
+                       y = cases_daily)) +
+  geom_boxplot(outliers = F) +
+  geom_jitter(alpha = 0.3, width = 0.2) +
+  labs(x = "Month",
+       y = "Number of COVID Cases per Day")
 ```
 
 
@@ -133,7 +146,7 @@ Create a graph that maps the number of cases in California in 2021 only. Be sure
 
 **Which month in 2021 had the fewest number of cases in California?**
 
->Insert Answer Here
+> June  
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
 
